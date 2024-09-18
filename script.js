@@ -33,7 +33,6 @@ const questions = [
     }
 ];
 
-
 const startButton          = document.getElementById('start-btn');
 const questionContainer    = document.getElementById('question-container');
 const questionElement      = document.getElementById('question');
@@ -42,23 +41,13 @@ const scoreElement         = document.getElementById('score');
 const nextButton           = document.getElementById('next-btn');
 const rptButton            = document.getElementById('rpt-btn');
 const resetButton          = document.getElementById('reset-btn');
-
-
-// 
-// const restartButton        = document.getElementById('restart-btn');
-// const welcomeScreen        = document.getElementById('welcome-screen');
-// const quizScreen           = document.getElementById('quiz-screen');
-// const scoreScreen          = document.getElementById('score-screen');
-// 
-
+const msgScore             = document.getElementById("msg-score");
 
 
 let shuffledQuestions;
 let currentQuestionIndex;
 let score;
 let rptCorrect = false;
-
-
 
 document.addEventListener(
     "DOMContentLoaded", function() {
@@ -70,6 +59,7 @@ startButton.addEventListener(
     "click", function() {
         showScreen(2);
         startGame();
+
     }
 );
 
@@ -85,10 +75,15 @@ nextButton.addEventListener(
             setNextQuestion();
         } else {
             showScreen(3);
-            endGame();
-        }
-
-        
+            endGame();  
+            if (score == 0) {
+                msgCongratulation("Intentalo otra vez");
+            } else if (score > 0 && score < 4) {
+                msgCongratulation("Puedes mejorar");
+            } else if (score == 4) {
+                msgCongratulation("¡LO LOGRASTE!")
+            }
+        } 
     }
 )
 
@@ -103,10 +98,6 @@ resetButton.addEventListener(
         location.reload();
     }
 )
-
-
-
-
 
 function startGame() {
     shuffledQuestions = questions.sort(() => Math.random() - 0.5);
@@ -141,7 +132,6 @@ function showQuestion(question) {
             button.addEventListener('click', selectAnswer);
         
             answerButtonsElement.appendChild(button);
-
         }
     );
 }
@@ -156,14 +146,11 @@ function selectAnswer(e) {
     } else {
         rptCorrect = false;
     }
-
     showNextBtn();
 }
 
 function endGame() {
-    // quizScreen.classList.add('hidden');
     scoreElement.innerText = score;
-    // scoreScreen.classList.remove('hidden');
 }
 
 function hiddenNextBtn() {
@@ -180,26 +167,34 @@ function showNextBtn() {
 
 function myAnim() {
     const elemento = document.getElementById("app");
-
-    // Elimina la clase si ya está presente (para reiniciar la animación)
-    elemento.classList.remove("app");
-
-    // Vuelve a agregar la clase después de un breve retraso para que la animación se reinicie
-    setTimeout(() => {
+    elemento.classList.remove("app");setTimeout(() => {
         elemento.classList.add("app");
     }, 0);
 }
 
 function stylesDefault() {
-    // Selecciona todos los botones con la clase "btn"
     const botones = document.querySelectorAll('.btn');
-
-    // Itera sobre cada botón y aplica nuevos estilos
     botones.forEach(boton => {
-        boton.style.backgroundColor = "white";    // Cambia el color de fondo
-        // boton.style.color = "white";              // Cambia el color del texto
-        // boton.style.border = "2px solid black";   // Agrega un borde
-        // boton.style.padding = "15px 30px";        // Ajusta el padding
-        // boton.style.fontSize = "16px";            // Cambia el tamaño del texto
+        boton.style.backgroundColor = "white";
     });
 }
+
+function msgCongratulation (myMessage) {
+    msgScore.innerText = myMessage;
+}
+
+// function PantallaCompleta () {
+    
+//     const elem = document.documentElement;
+
+
+//     if (elem.requestFullscreen) {
+//         elem.requestFullscreen();
+//     } else if (elem.mozRequestFullScreen) { // Firefox
+//         elem.mozRequestFullScreen();
+//     } else if (elem.webkitRequestFullscreen) { // Chrome, Safari y Opera
+//         elem.webkitRequestFullscreen();
+//     } else if (elem.msRequestFullscreen) { // Internet Explorer/Edge
+//         elem.msRequestFullscreen();
+//     }
+// }
